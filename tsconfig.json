@@ -1,0 +1,11 @@
+{
+  "extends": "@tsconfig/recommended",
+  "compilerOptions": {
+    "experimentalDecorators": true,
+		"module": "esnext",
+		"moduleResolution": "nodenext",
+		"target": "ESNext",
+		"outDir": "dist",
+		"declaration": true
+	}
+}
