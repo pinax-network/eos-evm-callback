@@ -21,23 +21,23 @@ const session = new Session({
 
 @Struct.type('callback')
 class Callback extends Struct {
-    @Struct.field('contract') declare contract: Name
-    @Struct.field('action') declare action: Name
+    @Struct.field(Name) declare contract: Name
+    @Struct.field(Name) declare action: Name
 }
 
 @Struct.type('input')
 class Input extends Struct {
-    @Struct.field('context') declare context?: Bytes
-    @Struct.field('from') declare from?: Bytes
-    @Struct.field('to') declare to: Bytes
-    @Struct.field('data') declare data: Bytes
-    @Struct.field('value') declare value?: Bytes
+    @Struct.field(Bytes) declare context?: Bytes
+    @Struct.field(Bytes) declare from?: Bytes
+    @Struct.field(Bytes) declare to: Bytes
+    @Struct.field(Bytes) declare data: Bytes
+    @Struct.field(Bytes) declare value?: Bytes
 }
 
 @Struct.type('exec')
 class Exec extends Struct {
-    @Struct.field('input') declare input: Input
-    @Struct.field('callback') declare callback: Callback
+    @Struct.field(Input) declare input: Input
+    @Struct.field(Callback) declare callback: Callback
 }
 
 // https://github.com/eosnetworkfoundation/eos-evm/blob/8f649397c2f20cd66dd936440c735569bbf969c3/contract/tests/exec_tests.cpp#L72-L82
@@ -48,7 +48,7 @@ function exec(session: Session): AnyAction {
     data.append(Bytes.from("550B8c0819E5FB10AaE5148d0E6E3BC5F1329C1A")); // account.address
 
     return {
-        account: "eosio",
+        account: "eosio.evm",
         name: "exec",
         authorization: [session.permissionLevel],
         data: Exec.from({
@@ -62,11 +62,11 @@ function exec(session: Session): AnyAction {
             callback: Callback.from({
                 contract: Name.from(session.actor),
                 action: Name.from("callback"),
-            }),
-        })
+            })
+        }),
     }
 }
 
 const action = exec(session);
-// const response = await session.transact({action}, {broadcast: false})
+const response = await session.transact({action}, {broadcast: false})
 // console.log(response);
