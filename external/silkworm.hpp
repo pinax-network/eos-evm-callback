@@ -132,7 +132,7 @@ static constexpr uint8_t kUnhexTable4[256] = {
 
 std::string to_hex(bytes bytes, bool with_prefix) {
     static const char* kHexDigits{"0123456789abcdef"};
-    std::string out(bytes.length() * 2 + (with_prefix ? 2 : 0), '\0');
+    std::string out(bytes.size() * 2 + (with_prefix ? 2 : 0), '\0');
     char* dest{&out[0]};
     if (with_prefix) {
         *dest++ = '0';
