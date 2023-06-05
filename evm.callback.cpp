@@ -2,7 +2,7 @@
 
 int64_t code::bytes_to_int64( const bytes data) {
     eosio::check(data.size() == 32, "bytes_to_int64: wrong length");
-    auto v = intx::be::unsafe::load<uint256>(data.data()) / pow(10, 14);
+    auto v = intx::be::unsafe::load<uint256>(data.data()) / pow(10, 14); // reduce precision
     eosio::check(v <= numeric_limits<int64_t>::max(), "bytes_to_int64: out of range");
     return int64_t(v);
 }
@@ -17,7 +17,7 @@ void code::callback( const int32_t status, const bytes data, const std::optional
     const string contract = context_str.substr(0, 40);
     const string address = context_str.substr(40, 40);
 
-    // // Push transaction
+    // Push transaction
     balance_action balance{ get_self(), { get_self(), "active"_n } };
     balance.send( contract, address, quantity );
 }
