@@ -45,7 +45,8 @@ function exec(session: Session): AnyAction {
     const to = Bytes.from("9fC25190baC66D7be4639268220d1Bd363ca2698"); // contract_addr
     const data = new Bytes();
     data.append(Bytes.from("70a08231")); // sha3(balanceOf(address))[:4]
-    data.append(Bytes.from("48dAB0EF543daAb424e2692A9Eb9703a5D713Cde")); // account.address
+    data.append(Bytes.from("00000000000000000000000048dAB0EF543daAb424e2692A9Eb9703a5D713Cde"));
+    // data.append(Bytes.from("48dAB0EF543daAb424e2692A9Eb9703a5D713Cde")); // account.address
 
     return {
         account: "eosio.evm",
@@ -70,3 +71,6 @@ function exec(session: Session): AnyAction {
 const action = exec(session);
 const response = await session.transact({action}, {broadcast: true})
 console.log(response);
+
+// const balance = Bytes.from("0000000000000000000000000000000000000000000004698c5e1bd5665760ed");
+// console.log(balance.toString())

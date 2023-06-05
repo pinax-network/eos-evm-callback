@@ -1,2 +1,6 @@
 node_modules
 .env
+
+*.abi
+*.wasm
+eosc-vault.json
