@@ -51,22 +51,22 @@ function exec(session: Session): AnyAction {
         account: "eosio.evm",
         name: "exec",
         authorization: [session.permissionLevel],
-        data: Exec.from({
-            input: Input.from({
-                context: new Bytes(),
-                from: new Bytes(),
+        data: {
+            input: {
+                // context: new Bytes(),
+                // from: new Bytes(),
                 to,
                 data,
-                value: new Bytes(),
-            }),
-            callback: Callback.from({
+                // value: new Bytes(),
+            },
+            callback: {
                 contract: Name.from(session.actor),
                 action: Name.from("callback"),
-            })
-        }),
+            }
+        },
     }
 }
 
 const action = exec(session);
 const response = await session.transact({action}, {broadcast: false})
-// console.log(response);
+console.log(response);
