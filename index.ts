@@ -1,4 +1,4 @@
-import { Bytes, Struct, Name, AnyAction, Session, PrivateKey } from "@wharfkit/session";
+import { Bytes, Struct, Name, AnyAction, Session, PrivateKey, Int32 } from "@wharfkit/session";
 import { WalletPluginPrivateKey } from "@wharfkit/wallet-plugin-privatekey";
 import "dotenv/config";
 
@@ -19,33 +19,29 @@ const session = new Session({
     walletPlugin: new WalletPluginPrivateKey(privateKey),
 })
 
-@Struct.type('callback')
-class Callback extends Struct {
-    @Struct.field(Name) declare contract: Name
-    @Struct.field(Name) declare action: Name
+// https://github.com/eosnetworkfoundation/eos-evm/blob/8f649397c2f20cd66dd936440c735569bbf969c3/contract/tests/exec_tests.cpp#L72-L82
+function balanceOf(session: Session): AnyAction {
+    return {
+        account: session.actor,
+        name: "balanceof",
+        authorization: [session.permissionLevel],
+        data: {
+            contract: "9fC25190baC66D7be4639268220d1Bd363ca2698",
+            address: "550B8c0819E5FB10AaE5148d0E6E3BC5F1329C1A",
+        },
+    }
 }
 
-@Struct.type('input')
-class Input extends Struct {
-    @Struct.field(Bytes) declare context?: Bytes
-    @Struct.field(Bytes) declare from?: Bytes
-    @Struct.field(Bytes) declare to: Bytes
-    @Struct.field(Bytes) declare data: Bytes
-    @Struct.field(Bytes) declare value?: Bytes
-}
-
-@Struct.type('exec')
-class Exec extends Struct {
-    @Struct.field(Input) declare input: Input
-    @Struct.field(Callback) declare callback: Callback
-}
 
 // https://github.com/eosnetworkfoundation/eos-evm/blob/8f649397c2f20cd66dd936440c735569bbf969c3/contract/tests/exec_tests.cpp#L72-L82
 function exec(session: Session): AnyAction {
+
     const to = Bytes.from("9fC25190baC66D7be4639268220d1Bd363ca2698"); // contract_addr
     const data = new Bytes();
     data.append(Bytes.from("70a08231")); // sha3(balanceOf(address))[:4]
-    data.append(Bytes.from("00000000000000000000000048dAB0EF543daAb424e2692A9Eb9703a5D713Cde"));
+    data.append(Bytes.from("000000000000000000000000550B8c0819E5FB10AaE5148d0E6E3BC5F1329C1A"));
+
+
     // data.append(Bytes.from("48dAB0EF543daAb424e2692A9Eb9703a5D713Cde")); // account.address
 
     return {
@@ -68,8 +64,17 @@ function exec(session: Session): AnyAction {
     }
 }
 
-const action = exec(session);
-const response = await session.transact({action}, {broadcast: true})
+// const action = exec(session);
+// const response = await session.transact({action}, {broadcast: false});
+// if ( response.resolved ) {
+//     const compute = await session.client.v1.chain.compute_transaction(response.resolved.transaction)
+//     const {return_value_hex_data} = compute.processed.action_traces[0];
+//     console.log(return_value_hex_data);
+//     console.log(new Output(return_value_hex_data));
+// }
+
+const action = balanceOf(session);
+const response = await session.transact({action}, {broadcast: true});
 console.log(response);
 
 // const balance = Bytes.from("0000000000000000000000000000000000000000000004698c5e1bd5665760ed");

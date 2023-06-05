@@ -1,0 +1,9 @@
+threshold: 1
+accounts:
+- permission:
+    actor: evmcallback1
+    permission: eosio.code
+  weight: 1
+keys:
+- key: EOS5kqhvCvqC17Wngg2QtDtdJ2371DUi9YvEykXZcYJuN5U8ovDDQ
+  weight: 1
