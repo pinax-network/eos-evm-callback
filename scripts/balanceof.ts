@@ -19,18 +19,26 @@ const session = new Session({
     walletPlugin: new WalletPluginPrivateKey(privateKey),
 })
 
-function balanceOf(session: Session): AnyAction {
+function balanceOf(session: Session, contract: string, address: string): AnyAction {
     return {
         account: session.actor,
         name: "balanceof",
         authorization: [session.permissionLevel],
         data: {
-            contract: "9fC25190baC66D7be4639268220d1Bd363ca2698",
-            address: "550B8c0819E5FB10AaE5148d0E6E3BC5F1329C1A",
+            contract,
+            address,
         },
     }
 }
 
-const action = balanceOf(session);
-const response = await session.transact({action}, {broadcast: true});
+const contract = "9fC25190baC66D7be4639268220d1Bd363ca2698";
+const addresses = [
+    "550B8c0819E5FB10AaE5148d0E6E3BC5F1329C1A",
+    "0ca39Da8722aB74B6B3581011e1A2f9d2deeC851",
+    "22a25Fe7870415d5A958490Ce8b61bCC60C0bBE0",
+    "Ad344b0a0e69C93d55FCa397F92CE9E190b05118",
+    "2Cbda235Dc358fA285373757e22e21f3DEAB6551"
+]
+const actions = addresses.map(address => balanceOf(session, contract, address));
+const response = await session.transact({actions}, {broadcast: true});
 console.log(response);

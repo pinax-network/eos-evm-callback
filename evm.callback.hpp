@@ -25,8 +25,8 @@ public:
     void balanceof( const string contract, const string address );
 
     [[eosio::action]]
-    void balance( const string contract, const string address, const asset quantity );
-    using balance_action = eosio::action_wrapper<"balance"_n, &code::balance>;
+    void update( const string contract, const string address, const int64_t amount );
+    using update_action = eosio::action_wrapper<"update"_n, &code::update>;
 
 private:
     int64_t bytes_to_int64( const bytes data);

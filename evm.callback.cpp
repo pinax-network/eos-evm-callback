@@ -10,16 +10,15 @@ int64_t code::bytes_to_int64( const bytes data) {
 [[eosio::action]]
 void code::callback( const int32_t status, const bytes data, const std::optional<bytes> context )
 {
-    check(get_first_receiver() == get_self(), "callback must be called by self");
+    check(get_first_receiver() == get_self(), "callback must initially be called by this contract");
     const int64_t amount = bytes_to_int64(data);
-    const asset quantity = asset{amount, symbol{"USDT", 4}};
     const string context_str = silkworm::to_hex(*context, false);
     const string contract = context_str.substr(0, 40);
     const string address = context_str.substr(40, 40);
 
     // Push transaction
-    balance_action balance{ get_self(), { get_self(), "active"_n } };
-    balance.send( contract, address, quantity );
+    update_action update{ get_self(), { get_self(), "active"_n } };
+    update.send( contract, address, amount );
 }
 
 [[eosio::action]]
@@ -42,7 +41,7 @@ void code::balanceof( const string contract, const string address )
     input.to = contract_bytes;
 
     // Context
-    bytes context;
+    bytes context; // contract + address
     context.insert(context.end(), contract_bytes.begin(), contract_bytes.end());
     context.insert(context.end(), address_bytes.begin(), address_bytes.end());
     input.context = context;
@@ -58,7 +57,7 @@ void code::balanceof( const string contract, const string address )
 }
 
 [[eosio::action]]
-void code::balance( const string contract, const string address, const asset quantity )
+void code::update( const string contract, const string address, const int64_t amount )
 {
     require_auth( get_self() );
 }
