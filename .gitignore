@@ -4,3 +4,4 @@ node_modules
 *.abi
 *.wasm
 eosc-vault.json
+.vscode

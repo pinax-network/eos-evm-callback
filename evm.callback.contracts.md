@@ -12,9 +12,10 @@ spec_version: "0.2.0"
 title: callback
 ---
 
-<h1 class="contract">balance</h1>
+
+<h1 class="contract">update</h1>
 
 ---
 spec_version: "0.2.0"
-title: balance
+title: update
 ---

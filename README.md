@@ -15,6 +15,6 @@ Call action `balanceof` using the following params:
 
 > Multi-exec calls with `context` to capture **contract + address** information
 
-https://jungle4.eosq.eosnation.io/tx/fb1f4483b94074475fa2c9c77d990397955dab42cc2109d740896ef90bccddee
+https://jungle4.eosq.eosnation.io/tx/e48d7df95db89b26e5388da07ab86049c92652bfb2edbab40a4612ac59ea9655
 
 <img width="948" alt="image" src="https://github.com/eosnetworkfoundation/eos-evm-callback/assets/550895/af78d4a1-2520-4684-83da-768e59196616">
